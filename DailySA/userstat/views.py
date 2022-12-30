@@ -32,3 +32,20 @@ def ranking(request):
     rank = dict(sorted(rank.items(), key=lambda x: x[1], reverse=True))    
     rank = [rank]
     return render(request, 'userstat/ranking.html', {'rank': rank})
+
+def solved(request):
+    pnum = request.GET['pnum']
+    problem = Problem.objects.get(pk=pnum)
+    answer = problem.answer
+    question = problem.problem
+    user = request.user
+    user_solved = Solved.objects.filter(user_id=user)
+    switch = 0
+    for suser in user_solved :
+        if suser.problem_id == Problem.objects.get(pk=pnum) :
+            switch = 1
+            break
+    if switch == 0 :
+        tsolved = Solved(problem_id=Problem.objects.get(pk=pnum), user_id=user)
+        tsolved.save()
+    return render(request, 'main/result.html', {'pnum': pnum, 'problem': question, 'answer': answer})

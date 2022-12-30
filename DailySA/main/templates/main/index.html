@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-<form action= "{% url 'result' %}" method="get">
+<style>
+    form {
+        display: inline;
+    }
+</style>
     <div class="container">
         <br> <div clas="jumbotron"><b>NO.{{pnum}}</b> {{problem}}</div> <br>
-    <div class="list-group">
-    <label><input class="form-check-input" type="radio" name="select" value="{{o1}}"> 1. {{o1}}</label> <br>
-    <label><input class="form-check-input" type="radio" name="select" value="{{o2}}"> 2. {{o2}}</label> <br>
-    <label><input class="form-check-input" type="radio" name="select" value="{{o3}}"> 3. {{o3}}</label> <br>
-    <label><input class="form-check-input" type="radio" name="select" value="{{o4}}"> 4. {{o4}}</label> <br>
-    </div> <br>
+    <form action= "{% url 'result' %}" method="get">
     <input type="hidden" name="answer" value="{{answer}}">
     <input type="hidden" name="pnum" value="{{pnum}}">
-    <input type="submit" class="btn btn-primary">
+    <input type="submit" class="btn btn-primary" value="답 확인">
+    </form>
+    {% if user.is_authenticated %}
+    <form action= "{% url 'userstat:solved' %}" method="get">
+        <input type="hidden" name="pnum" value="{{pnum}}">
+        <input type="submit" class="btn btn-primary" value="풀었음">
+    </form>
+    <form action= "{% url 'posting' %}" method="get">
+        <input type="submit" class="btn btn-primary" value="문제 올리기">
+    </form>
+    {% endif %}
     </div>
-</form>
+
 {% endblock %}
